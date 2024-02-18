@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.chunjae.packages.mapper.PackagesMapper">
+    
+    <insert id="insertPackages" parameterType="kr.co.chunjae.packages.dto.PackagesDTO"
+            useGeneratedKeys="true" keyColumn="idx" keyProperty="idx">
+        INSERT
+        INTO tb_packages(subcate_idx, type_idx, name, source, explanation, display, original, saved, keyword)
+        VALUES(#{subcateIdx}, #{typeIdx}, #{name}, #{source}, #{explanation}, #{display}, #{original}, #{saved}, #{keyword})
+    </insert>
+
+
+    <insert id="insertPackagesThumbnailList" parameterType="java.util.Map">
+        INSERT
+        INTO tb_packages_thumbnail(packages_idx, original, saved, orders)
+        VALUES
+        <foreach collection="thumbnailList" item="thumbnail" separator=",">
+            (#{packagesIdx}, #{thumbnail.original}, #{thumbnail.saved}, #{thumbnail.orders})
+        </foreach>
+    </insert>
+
+    <select id="getThumbnailList" resultType="kr.co.chunjae.packages.dto.PackagesThumbnailDTO">
+        select saved, packages_idx, saved_path, upload_path, orders
+        from tb_packages_thumbnail
+        where packages_idx = #{idx}
+    </select>
+
+
+    <select id="getPackagesByIdx" parameterType="Integer" resultType="kr.co.chunjae.packages.dto.PackagesDTO">
+        select idx, subcate_idx, type_idx, name, source, explanation, display, original, saved, upload_path,
+        register_date, update_date, keyword
+        from tb_packages
+        where idx = #{idx}
+    </select>
+
+
+    <delete id="deletePackagesThumbnailByIdx" parameterType="Integer">
+        DELETE
+        FROM tb_packages_thumbnail
+        WHERE packages_idx = #{idx}
+    </delete>
+
+    <update id="updatePackages" parameterType="kr.co.chunjae.packages.dto.PackagesDTO">
+        UPDATE tb_packages
+        SET subcate_idx = #{subcateIdx}, type_idx = #{typeIdx}, name = #{name}, source = #{source}, explanation = #{explanation},
+        display = #{display}, original = #{original}, saved = #{saved}, update_date = now(), keyword = #{keyword}
+        WHERE idx = #{idx}
+    </update>
+
+
+    <!-- 뷰 이미지 리스트-->
+    <select id="selectPackagesThumbnailList" resultType="kr.co.chunjae.packages.dto.PackagesThumbnailDTO">
+        SELECT tpt.idx, packages_idx, tpt.saved, saved_path, name, explanation , source, update_date, tp.original
+        FROM tb_packages_thumbnail tpt
+        INNER JOIN tb_packages tp ON tpt.packages_idx = tp.idx
+        WHERE orders = 1
+    </select>
+
+    <!-- 뷰 전체 리스트-->
+    <select id="selectPackagesThumbnailListInMain" resultType="kr.co.chunjae.packages.dto.PackagesThumbnailDTO">
+        SELECT tpt.idx, packages_idx, tpt.saved, saved_path, name
+        FROM tb_packages_thumbnail tpt
+        INNER JOIN tb_packages tp ON tpt.packages_idx = tp.idx
+        WHERE orders = 1
+        ORDER BY tp.update_date DESC
+        LIMIT 5;
+    </select>
+
+
+    <select id="getCategoryList" parameterType="Integer" resultType="kr.co.chunjae.common.dto.CategoryDTO">
+        select a.name as subcateName, b.name as maincateName
+        from tb_subcategory a
+        left join tb_maincategory b
+        on a.maincate_idx = b.idx
+        where a.idx = #{category};
+    </select>
+
+</mapper>

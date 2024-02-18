@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.chunjae.template.mapper.TemplateMapper">
+
+    <insert id="insertTemplate" parameterType="kr.co.chunjae.template.dto.TemplateDTO"
+            useGeneratedKeys="true" keyColumn="idx" keyProperty="idx">
+        INSERT
+        INTO tb_template(subcate_idx, type_idx, name, source, explanation, display, original, saved, keyword)
+        VALUES(#{subcateIdx}, #{typeIdx}, #{name}, #{source}, #{explanation}, #{display}, #{original}, #{saved}, #{keyword})
+    </insert>
+
+    <insert id="insertTemplateThumbnailList" parameterType="java.util.Map">
+        INSERT
+        INTO tb_template_thumbnail(template_idx, original, saved, orders)
+        VALUES
+        <foreach collection="thumbnailList" item="thumbnail" separator=",">
+            (#{templateIdx}, #{thumbnail.original}, #{thumbnail.saved}, #{thumbnail.orders})
+        </foreach>
+    </insert>
+
+    <select id="getThumbnailList" resultType="kr.co.chunjae.template.dto.TemplateThumbnailDTO">
+        select saved, template_idx, saved_path, upload_path, orders
+        from tb_template_thumbnail
+        where template_idx = #{idx}
+    </select>
+
+    <select id="getTemplateByIdx" parameterType="Integer" resultType="kr.co.chunjae.template.dto.TemplateDTO">
+        select idx, subcate_idx, type_idx, name, source, explanation, display, original, saved, upload_path,
+            register_date, update_date, keyword
+        from tb_template
+        where idx = #{idx}
+    </select>
+
+    <delete id="deleteTemplateThumbnailByIdx" parameterType="Integer">
+        delete
+        from tb_template_thumbnail
+        where template_idx = #{idx}
+    </delete>
+
+    <update id="updateTemplate" parameterType="kr.co.chunjae.template.dto.TemplateDTO">
+        UPDATE tb_template
+        SET subcate_idx = #{subcateIdx}, type_idx = #{typeIdx}, name = #{name}, source = #{source}, explanation = #{explanation},
+        display = #{display}, original = #{original}, saved = #{saved}, update_date = now(), keyword = #{keyword}
+        WHERE idx = #{idx}
+    </update>
+
+    <select id="getThumbnailForTemplateList" resultType="kr.co.chunjae.template.dto.TemplateThumbnailDTO">
+        select a.saved as saved, a.template_idx, a.saved_path, a.upload_path,
+            b.name, b.saved as mainSaved, b.original as mainOriginal
+        from tb_template_thumbnail a
+        inner join tb_template b
+        on a.template_idx = b.idx
+        where a.orders = 1 and b.display = 1
+        order by b.register_date desc
+    </select>
+
+    <select id="getThumbnailForTemplateListInMain" resultType="kr.co.chunjae.template.dto.TemplateThumbnailDTO">
+        select a.saved as saved, a.template_idx, a.saved_path, a.upload_path,
+        b.name, b.saved as mainSaved, b.original as mainOriginal
+        from tb_template_thumbnail a
+        inner join tb_template b
+        on a.template_idx = b.idx
+        where a.orders = 1 and b.display = 1
+        order by b.register_date desc
+        Limit 5
+    </select>
+
+    <select id="getThumbnailForTemplateAdminList" resultType="kr.co.chunjae.template.dto.TemplateThumbnailDTO">
+        select a.saved as saved, a.template_idx, a.saved_path, a.upload_path,
+        b.name, b.saved as mainSaved, b.original as mainOriginal, b.type_idx, b.display, b.register_date
+        from tb_template_thumbnail a
+        inner join tb_template b
+        on a.template_idx = b.idx
+        where orders = 1
+        order by b.register_date desc
+    </select>
+
+    <select id="getCountTemplate" resultType="Integer">
+        select count(idx)
+        from tb_template
+    </select>
+
+    <select id="getCategory" parameterType="Integer" resultType="kr.co.chunjae.common.dto.CategoryDTO">
+        select a.name as subcateName, b.name as maincateName
+        from tb_subcategory a
+        left join tb_maincategory b
+        on a.maincate_idx = b.idx
+        where a.idx = #{category};
+    </select>
+</mapper>

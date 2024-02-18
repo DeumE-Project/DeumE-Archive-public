@@ -1,0 +1,46 @@
+server:
+  port: 8094
+  servlet:
+    jsp:
+      init-parameters:
+        development: true
+
+spring:
+  profiles:
+    default: dev
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mariadb://localhost:3306/deume_archive?serverTimezone=Asia/Seoul
+    username: root
+    password: 12345
+  servlet:
+    multipart:
+      max-request-size: 500MB
+      max-file-size: 500MB
+      file-size-threshold: 500MB
+  security:
+    user:
+      name: deume
+      password: chunjae
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: mapper_xml/**/*.xml
+
+logging:
+  level:
+    jdbc:
+      audit: warn
+      connection: warn
+      resultset: warn
+      resultsettable: info
+      sqlonly: warn
+      sqltiming: info
+#    org:
+#      springframework:
+#        transaction: debug

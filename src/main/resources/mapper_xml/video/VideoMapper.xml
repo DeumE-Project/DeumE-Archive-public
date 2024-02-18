@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!---->
+<mapper namespace="kr.co.chunjae.video.mapper.VideoMapper">
+    <!-- useGeneratedKeys(auto_increment), keyColumn(DB), keyProperty(DTO) -->
+    <insert id="saveVideo" parameterType="kr.co.chunjae.video.dto.VideoDTO"
+            useGeneratedKeys="true" keyColumn="idx" keyProperty="idx">
+        INSERT
+        INTO tb_video(subcate_idx, type_idx, name, source, explanation, display, original, saved, keyword)
+        VALUES(#{subcateIdx}, #{typeIdx}, #{name}, #{source}, #{explanation}, #{display}, #{original}, #{saved}, #{keyword})
+    </insert>
+
+    <resultMap id="videoWithThumbnails" type="kr.co.chunjae.video.dto.VideoDTO">
+<!--        id: primary key-->
+        <id column="v_idx" property="idx" jdbcType="INTEGER"/>
+        <result column="v_subcate_idx" property="subcateIdx" jdbcType="INTEGER"/>
+        <result column="v_type_idx" property="typeIdx" jdbcType="INTEGER"/>
+        <result column="v_name" property="name" jdbcType="VARCHAR"/>
+        <result column="v_source" property="source" jdbcType="VARCHAR" />
+        <result column="v_explanation" property="explanation" jdbcType="VARCHAR" />
+        <result column="v_display" property="display" jdbcType="INTEGER" />
+        <result column="v_original" property="original" jdbcType="VARCHAR" />
+        <result column="v_saved" property="saved" jdbcType="VARCHAR" />
+        <result column="v_upload_path" property="uploadPath" jdbcType="VARCHAR" />
+        <result column="v_register_date" property="registerDate" jdbcType="TIMESTAMP" />
+        <result column="v_update_date" property="updateDate" jdbcType="TIMESTAMP" />
+        <result column="v_keyword" property="keyword" jdbcType="VARCHAR" />
+
+        <result column="m_maincate_idx" property="maincateIdx" jdbcType="INTEGER" />
+
+        <result column="maincate_name" property="maincateName" jdbcType="VARCHAR" />
+        <result column="subcate_name" property="subcateName" jdbcType="VARCHAR" />
+
+        <collection property="videoThumbnailList" ofType="kr.co.chunjae.video.dto.VideoThumbnailDTO">
+            <id column="vt_idx" property="idx" jdbcType="INTEGER" />
+            <result column="vt_contents_idx" property="videoIdx" jdbcType="INTEGER" />
+            <result column="vt_original" property="original" jdbcType="VARCHAR" />
+            <result column="vt_saved" property="saved" jdbcType="VARCHAR" />
+            <result column="vt_upload_path" property="uploadPath" jdbcType="VARCHAR" />
+            <result column="vt_saved_path" property="savedPath" jdbcType="VARCHAR" />
+            <result column="vt_orders" property="orders" jdbcType="INTEGER" />
+        </collection>
+    </resultMap>
+<!--v : tb_video, vt : tb_video_thumbnail, m : tb_maincategory, s: tb_subcategory-->
+    <select id="selectVideo" parameterType="Integer" resultMap="videoWithThumbnails">
+        SELECT v.idx v_idx, subcate_idx v_subcate_idx, v.type_idx v_type_idx, v.name v_name, v.source v_source,
+            v.explanation v_explanation, display v_display, v.original v_original, v.saved v_saved,
+            v.upload_path v_upload_path, v.register_date v_register_date, v.update_date v_update_date,
+            v.keyword v_keyword,
+            vt.idx vt_idx, vt.video_idx vt_video_idx, vt.original vt_original, vt.saved vt_saved,
+            vt.upload_path vt_upload_path, vt.saved_path vt_saved_path, vt.orders vt_orders,
+            m.idx m_maincate_idx, s.name subcate_name, m.name maincate_name
+        FROM tb_video v INNER JOIN tb_video_thumbnail vt ON v.idx = vt.video_idx
+            INNER JOIN tb_subcategory s ON v.subcate_idx = s.idx
+            INNER JOIN tb_maincategory m ON s.maincate_idx = m.idx
+        WHERE v.idx = #{videoIdx}
+    </select>
+
+    <insert id="videoThumbnailsList" parameterType="Map">
+        INSERT
+        INTO tb_video_thumbnail(video_idx, original, saved, orders)
+        VALUES
+        <foreach collection="thumbnailList" item="thumbnail" separator=",">
+            (#{videoIdx}, #{thumbnail.original}, #{thumbnail.saved}, #{thumbnail.orders})
+        </foreach>
+    </insert>
+
+    <delete id="deleteVideoThumbnailByVideoIdx">
+        DELETE
+        FROM tb_video_thumbnail
+        WHERE video_idx = #{videoIdx}
+    </delete>
+
+    <update id="updateVideo" parameterType="kr.co.chunjae.video.dto.VideoDTO">
+        UPDATE tb_video
+        SET subcate_idx = #{subcateIdx}, type_idx = #{typeIdx}, name = #{name}, source = #{source}, explanation = #{explanation},
+        display = #{display}, original = #{original}, saved = #{saved}, update_date = now(), keyword = #{keyword}
+        WHERE idx = #{idx}
+    </update>
+
+    <select id="selectVideoFile" resultType="Map">
+        SELECT upload_path uploadPath, saved
+        FROM tb_video
+        WHERE idx=#{videoIdx}
+    </select>
+
+    <select id="selectVideoThumbnail" resultType="Map">
+        SELECT upload_path uploadPath, saved
+        FROM tb_video_thumbnail
+        WHERE video_idx=#{videoIdx}
+    </select>
+
+    <select id="selectVideoListThumbnail" resultType="kr.co.chunjae.video.dto.VideoThumbnailDTO">
+        SELECT vt.idx, video_idx, vt.saved, saved_path, name
+        FROM tb_video_thumbnail vt
+            INNER JOIN tb_video v ON vt.video_idx = v.idx
+        WHERE orders = 1
+
+    </select>
+
+    <select id="selectVideoListThumbnailInMain" resultType="kr.co.chunjae.video.dto.VideoThumbnailDTO">
+        SELECT vt.idx, video_idx, vt.saved, saved_path, name
+        FROM tb_video_thumbnail vt
+        INNER JOIN tb_video v ON vt.video_idx = v.idx
+        WHERE orders = 1
+        LIMIT 5
+    </select>
+    <select id="selectVideoFileNameList" parameterType="List" resultType="String">
+        SELECT saved
+        FROM tb_video
+        WHERE idx IN(
+        <foreach collection="videoIdxList" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+    </select>
+    <select id="manageVideoList" resultMap="videoWithThumbnails">
+        SELECT v.idx v_idx, subcate_idx v_subcate_idx, v.type_idx v_type_idx, v.name v_name, v.source v_source,
+        v.explanation v_explanation, display v_display, v.original v_original, v.saved v_saved,
+        v.upload_path v_upload_path, v.register_date v_register_date, v.update_date v_update_date,
+        v.keyword v_keyword,
+        vt.idx vt_idx, vt.video_idx vt_video_idx, vt.original vt_original, vt.saved vt_saved,
+        vt.upload_path vt_upload_path, vt.saved_path vt_saved_path, vt.orders vt_orders,
+        m.idx m_maincate_idx, s.name subcate_name, m.name maincate_name
+        FROM tb_video v INNER JOIN tb_video_thumbnail vt ON v.idx = vt.video_idx
+            INNER JOIN tb_subcategory s ON v.subcate_idx = s.idx
+            INNER JOIN tb_maincategory m ON s.maincate_idx = m.idx
+        WHERE vt.orders = 1 order by v_idx asc
+
+    </select>
+</mapper>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.chunjae.gif.mapper.GifMapper">
+
+  <!--  사진 업로드-->
+    <insert id="insertGif" parameterType="kr.co.chunjae.gif.dto.GifDTO"
+            useGeneratedKeys="true" keyColumn="idx" keyProperty="idx">
+        INSERT
+        INTO tb_gif(subcate_idx, type_idx, name, source, explanation, display, original, saved, keyword)
+        VALUES(#{subcateIdx}, #{typeIdx}, #{name}, #{source}, #{explanation}, #{display}, #{original}, #{saved}, #{keyword})
+    </insert>
+
+ <!--   썸네일 생성을 위한 resultMap생성-->
+    <resultMap id="gifWithThumbnails" type="kr.co.chunjae.gif.dto.GifDTO">
+        <id column="tg_idx" property="idx" jdbcType="INTEGER" />
+        <result column="tg_subcate_idx" property="subcateIdx" jdbcType="INTEGER" />
+        <result column="tg_type_idx" property="typeIdx" jdbcType="INTEGER" />
+        <result column="tg_name" property="name" jdbcType="VARCHAR" />
+        <result column="tg_source" property="source" jdbcType="VARCHAR" />
+        <result column="tg_explanation" property="explanation" jdbcType="VARCHAR" />
+        <result column="tg_display" property="display" jdbcType="INTEGER" />
+        <result column="tg_original" property="original" jdbcType="VARCHAR" />
+        <result column="tg_saved" property="saved" jdbcType="VARCHAR" />
+        <result column="tg_upload_path" property="uploadPath" jdbcType="VARCHAR" />
+        <result column="tg_register_date" property="registerDate" jdbcType="TIMESTAMP" />
+        <result column="tg_update_date" property="updateDate" jdbcType="TIMESTAMP" />
+        <result column="tg_keyword" property="keyword" jdbcType="VARCHAR" />
+
+        <result column="tm_maincate_idx" property="maincateIdx" jdbcType="INTEGER" />
+
+        <collection property="gifThumbnailList" ofType="kr.co.chunjae.gif.dto.GifThumbnailDTO">
+            <id column="tgt_idx" property="idx" jdbcType="INTEGER" />
+            <result column="tgt_gif_idx" property="gifIdx" jdbcType="INTEGER" />
+            <result column="tgt_original" property="original" jdbcType="VARCHAR" />
+            <result column="tgt_saved" property="saved" jdbcType="VARCHAR" />
+            <result column="tgt_upload_path" property="uploadPath" jdbcType="VARCHAR" />
+            <result column="tgt_saved_path" property="savedPath" jdbcType="VARCHAR" />
+            <result column="tgt_orders" property="orders" jdbcType="INTEGER" />
+            <result column="tm_name" property="tmName" jdbcType="VARCHAR" />
+            <result column="ts_name" property="tsName" jdbcType="VARCHAR" />
+        </collection>
+    </resultMap>
+    <!--썸네일 생성-->
+    <insert id="insertGifThumbnailList" parameterType="java.util.Map">
+        INSERT
+        INTO tb_gif_thumbnail(gif_idx, original, saved, orders)
+        VALUES
+        <foreach collection="thumbnailList" item="thumbnail" separator=",">
+            (#{gifIdx}, #{thumbnail.original}, #{thumbnail.saved}, #{thumbnail.orders})
+        </foreach>
+    </insert>
+    <!--이미지 정보 보기-->
+    <select id="selectGif" parameterType="java.lang.Integer" resultMap="gifWithThumbnails">
+        SELECT tg.idx tg_idx, tg.subcate_idx tg_subcate_idx, tg.type_idx tg_type_idx, tg.name tg_name, tg.source tg_source,
+        tg.explanation tg_explanation, tg.display tg_display, tg.original tg_original, tg.saved tg_saved,
+        tg.upload_path tg_upload_path, tg.register_date tg_register_date, tg.update_date tg_update_date,
+        tg.keyword tg_keyword,
+        tgt.idx tgt_idx, tgt.gif_idx tgt_gif_idx, tgt.original tgt_original, tgt.saved tgt_saved,
+        tgt.upload_path tgt_upload_path, tgt.saved_path tgt_saved_path, tgt.orders tgt_orders,
+        tm.idx tm_maincate_idx ,tm.name tm_name , ts.name ts_name
+        FROM tb_gif tg
+        INNER JOIN tb_gif_thumbnail tgt ON tg.idx = tgt.gif_idx
+        INNER JOIN tb_subcategory ts ON tg.subcate_idx = ts.idx
+        INNER JOIN tb_maincategory tm ON ts.maincate_idx = tm.idx
+        WHERE tg.idx = #{gifIdx}
+    </select>
+    <!--이미지 정보 수정-->
+    <update id="updateGif" parameterType="kr.co.chunjae.gif.dto.GifDTO">
+        UPDATE tb_gif
+        SET subcate_idx = #{subcateIdx}, type_idx = #{typeIdx}, name = #{name}, source = #{source}, explanation = #{explanation},
+        display = #{display}, original = #{original}, saved = #{saved}, update_date = now(), keyword = #{keyword}
+        WHERE idx = #{idx}
+    </update>
+    <!--썸네일 삭제-->
+    <delete id="deleteGifThumbnailByGifIdx">
+        DELETE
+        FROM tb_gif_thumbnail
+        WHERE gif_idx = #{gifIdx}
+    </delete>
+    <!--메인 이미지 정보-->
+    <select id="selectGifMainImage" resultType="java.util.Map">
+        SELECT upload_path uploadPath, saved
+        FROM tb_gif
+        WHERE idx = #{gifIdx}
+    </select>
+    <!--썸네일 이미지 정보-->
+    <select id="selectGifThumbnail" resultType="java.util.Map">
+        SELECT upload_path uploadPath, saved
+        FROM tb_gif_thumbnail
+        WHERE gif_idx = #{gifIdx}
+    </select>
+    <!--이미지 리스트-->
+    <select id="getGifList" resultType="java.util.Map">
+        SELECT idx,subcate_idx,type_idx,name,source,explanation,original,saved,upload_path,register_date,update_date,keyword
+        FROM tb_gif
+        ORDER BY update_date DESC
+    </select>
+   <!-- 뷰 이미지 리스트-->
+    <select id="selectGifThumbnailForList" resultType="kr.co.chunjae.gif.dto.GifThumbnailDTO">
+        SELECT tgt.idx, gif_idx, tgt.saved, saved_path, name , explanation , source,update_date, tg.original
+        FROM tb_gif_thumbnail tgt
+        INNER JOIN tb_gif tg ON tgt.gif_idx = tg.idx
+        WHERE orders = 1
+    </select>
+
+    <!-- 뷰 전체 리스트-->
+    <select id="selectGifThumbnailForListInMain" resultType="kr.co.chunjae.gif.dto.GifThumbnailDTO">
+        SELECT tgt.idx, gif_idx, tgt.saved, saved_path, name
+        FROM tb_gif_thumbnail tgt
+        INNER JOIN tb_gif tg ON tgt.gif_idx = tg.idx
+        WHERE orders = 1
+        ORDER BY tg.update_date DESC
+        LIMIT 5
+    </select>
+
+</mapper>
