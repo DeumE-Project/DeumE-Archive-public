@@ -98,19 +98,24 @@ https://github.com/DeumE-Project/DeumE-Archive-public/assets/145942491/5ddfef75-
 <br/>
 1. 비디오 등록
 
-
+https://github.com/DeumE-Project/DeumE-Archive-public/assets/140072536/1ac7249c-598a-4b68-a602-fab2a3149fd7
 
 2. 비디오 수정
 
-
+https://github.com/DeumE-Project/DeumE-Archive-public/assets/140072536/527ed6f4-f00d-4055-9cf2-04c1d68f7067
 
 3. 비디오 상세 정보 및 다운로드
 
-
+https://github.com/DeumE-Project/DeumE-Archive-public/assets/140072536/168a2716-8740-428c-a5cc-319c43df336c
 
 4. 비디오 리스트 및 다운로드
 
+https://github.com/DeumE-Project/DeumE-Archive-public/assets/140072536/ea2e4c75-df74-4c61-93f9-985b71c1394d
 
+
+5. 비디오 상세보기 및 수정 
+
+https://github.com/DeumE-Project/DeumE-Archive-public/assets/140072536/5ac303fd-4c0c-447c-ba44-383cf20a0175
 
 </details>
 
