@@ -94,6 +94,26 @@ https://github.com/DeumE-Project/DeumE-Archive-public/assets/145942491/5ddfef75-
 
 </details>
 
+<details><summary>비디오 관련 기능</summary>
+<br/>
+1. 비디오 등록
+
+
+
+2. 비디오 수정
+
+
+
+3. 비디오 상세 정보 및 다운로드
+
+
+
+4. 비디오 리스트 및 다운로드
+
+
+
+</details>
+
 
 
 
