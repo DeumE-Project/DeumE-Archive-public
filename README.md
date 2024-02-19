@@ -150,6 +150,22 @@ https://github.com/LMH9999/Front_Study/assets/145963633/32b9cfa2-2da9-41b1-9496-
 
 </details>
 
+<details><summary>꾸러미 관련 기능</summary>
+<br/>
+1. 꾸러미 등록
+
+https://github.com/DeumE-Project/DeumE-Archive-public/assets/145963790/508d77cd-9c01-4d87-b8f2-9c27e33cbabd
+
+2. 꾸러미 수정
+
+https://github.com/DeumE-Project/DeumE-Archive-public/assets/145963790/b8140471-943b-4378-9b1f-750bd35bb16f
+
+3. 꾸러미 목록 / 상세보기 / 다운로드
+
+https://github.com/DeumE-Project/DeumE-Archive-public/assets/145963790/ce33ffde-0056-4959-b09a-bd8de763251b
+
+</details>
+
 
 
 ## 🤐 개선 사항 🤐
