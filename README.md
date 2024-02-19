@@ -26,15 +26,8 @@
 
 
 ## 📖 프로젝트 소개📖
-<details><summary></summary>
-<br>
- 기존의 클래스 아카이브의 화면을 참고하여 관리자 기능 구현
 
-
-
-</details>
-
-
+ 기존의 클래스 아카이브의 화면을 참고하여 관리자 기능 구현 <br><br>
 
 ## 🙋‍♀️ Team_Member 🙋‍♀️
 
@@ -141,7 +134,21 @@ https://github.com/DeumE-Project/DeumE-Archive-public/assets/140072536/5ac303fd-
 
 </details>
 
+<details><summary>템플릿 관련 기능</summary>
+<br/>
+1. 템플릿 등록
 
+https://github.com/LMH9999/Front_Study/assets/145963633/53ac1298-3689-45d8-989d-e227c4368d59
+
+2. 템플릿 수정
+
+https://github.com/LMH9999/Front_Study/assets/145963633/645189ca-4073-444c-b0cf-505727f93a59
+
+3. 템플릿 목록 / 상세보기 / 다운로드
+
+https://github.com/LMH9999/Front_Study/assets/145963633/32b9cfa2-2da9-41b1-9496-f2081fdccb19
+
+</details>
 
 
 
