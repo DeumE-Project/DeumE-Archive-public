@@ -74,14 +74,32 @@ REST API 를 활용하기 위해서 ajax 사용
 </details>
 
 
+<details><summary>이미지 관련 기능</summary>
+<br/>
+1. 이미지 등록
+
+https://github.com/DeumE-Project/DeumE-Archive-public/assets/145942491/5b15de41-f63d-4a68-9a57-13f781e227d3
+
+2. 이미지 수정
+
+https://github.com/DeumE-Project/DeumE-Archive-public/assets/145942491/fa44536c-6305-40a5-9f48-e7cb387d41fa
+
+3. 이미지 상세 정보 및 다운로드
+
+https://github.com/DeumE-Project/DeumE-Archive-public/assets/145942491/04820427-9a35-493c-a802-889d9a784411
+
+4. 이미지 리스트 및 다운로드
+
+https://github.com/DeumE-Project/DeumE-Archive-public/assets/145942491/5ddfef75-4491-4d98-83d1-037567d37fdb
+
+</details>
+
+
 <details><summary>움직이는 이미지 관련 기능</summary>
 <br/>
 1. 움직이는 이미지 등록
 
-
-
 https://github.com/DeumE-Project/DeumE-Archive-public/assets/145524959/72b81f17-d78e-409d-bd4a-d56838a7cdb9
-
 
 
 2. 움직이는 이미지 수정
@@ -97,30 +115,7 @@ https://github.com/DeumE-Project/DeumE-Archive-public/assets/145524959/71523439-
 
 
 
-
 </details>
-
-
-<details><summary>콘텐트(이미지) 관련 기능</summary>
-<br/>
-1. 콘텐츠 등록
-
-https://github.com/DeumE-Project/DeumE-Archive-public/assets/145942491/5b15de41-f63d-4a68-9a57-13f781e227d3
-
-2. 콘텐츠 수정
-
-https://github.com/DeumE-Project/DeumE-Archive-public/assets/145942491/fa44536c-6305-40a5-9f48-e7cb387d41fa
-
-3. 콘텐츠 상세 정보 및 다운로드
-
-https://github.com/DeumE-Project/DeumE-Archive-public/assets/145942491/04820427-9a35-493c-a802-889d9a784411
-
-4. 콘텐츠 리스트 및 다운로드
-
-https://github.com/DeumE-Project/DeumE-Archive-public/assets/145942491/5ddfef75-4491-4d98-83d1-037567d37fdb
-
-</details>
-
 <details><summary>비디오 관련 기능</summary>
 <br/>
 1. 비디오 등록
