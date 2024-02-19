@@ -74,6 +74,33 @@ REST API 를 활용하기 위해서 ajax 사용
 </details>
 
 
+<details><summary>움직이는 이미지 관련 기능</summary>
+<br/>
+1. 움직이는 이미지 등록
+
+
+
+https://github.com/DeumE-Project/DeumE-Archive-public/assets/145524959/72b81f17-d78e-409d-bd4a-d56838a7cdb9
+
+
+
+2. 움직이는 이미지 수정
+
+
+https://github.com/DeumE-Project/DeumE-Archive-public/assets/145524959/decbd84a-8c9b-4480-82bc-858682c31f71
+
+
+3. 움직이는 이미지 상세 정보 및 다운로드
+
+
+https://github.com/DeumE-Project/DeumE-Archive-public/assets/145524959/71523439-107d-4c00-980d-6e755473b3ab
+
+
+
+
+</details>
+
+
 <details><summary>콘텐트(이미지) 관련 기능</summary>
 <br/>
 1. 콘텐츠 등록
@@ -118,6 +145,7 @@ https://github.com/DeumE-Project/DeumE-Archive-public/assets/140072536/ea2e4c75-
 https://github.com/DeumE-Project/DeumE-Archive-public/assets/140072536/5ac303fd-4c0c-447c-ba44-383cf20a0175
 
 </details>
+
 
 
 
